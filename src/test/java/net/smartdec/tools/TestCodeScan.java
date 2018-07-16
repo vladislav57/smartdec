@@ -11,15 +11,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 
-public class Main {
+/**
+ * В этом классе нужно разместить тесты, которые сканируют код, вставленный на форму сайта (code scan, paste code)
+ */
+public class TestCodeScan {
 
     @Test
-    public void testMainPage() {
+    public void testScanSimpleJavaProgramWithoutErrors() {
 
         // подготовка к тесту
         URL url = getClass().getClassLoader().getResource("chromedriver.exe"); /* Не утверждаю, что так правильно.
         Возможно, на реальном проекте лучше хранить драйвер, например, на общем сетевом ресурсе.
-        Места он занимает немного, поэтому здесь так сделано для удобства проверяющего. */
+        Места он занимает немного, поэтому здесь драйвер добавлен в ресурсы проекта для удобства проверяющего. */
         System.setProperty("webdriver.chrome.driver", url.getFile());
         WebDriver wd = new ChromeDriver();
 
@@ -36,7 +39,7 @@ public class Main {
         Assert.assertNotNull("Кнопка paste code не найдена на странице", pasteCodeButton);
         pasteCodeButton.click();
         Assert.assertEquals("Не удалось перейти на страницу отправки кода для сканирования",
-                "http://tool.smartdec.net/newscan?type=codeblock", wd.getCurrentUrl());
+                "http://tool.smartdec.net/newscan?type=codeblock", wd.getCurrentUrl()); // TODO добавить ожидание загрузки страницы и отделить проверку
 
         // вставляем код в textarea
         WebElement textArea = wd.findElement(By.id("codeblock"));
@@ -57,6 +60,14 @@ public class Main {
         WebDriverWait wait = new WebDriverWait(wd, 10);
         Boolean scanResult = wait.until(ExpectedConditions.urlMatches("http://tool.smartdec.net/scan/[0-9a-z]*"));
         Assert.assertTrue("Не удалось перейти на страницу с результатами анализа кода", scanResult);
+
+        // проверяем результат
+
+        // 1 - проверяем, что на странице выведено No Source и No selected bug/source
+        // TODO добавить код проверки
+
+        // 2 - проверяем, что на странице доступен файл codeblock.sol с результатами
+        // TODO добавить код проверки
 
         // завершаем работу
         wd.quit();
