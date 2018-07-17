@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class TestCodeScan extends BaseTest {
 
-    // вот так должен выглядеть тест, ради этого все затевалось
+    // вот так должен выглядеть тест, ради этого написан остальной код
 
     @Test
     public void testScanSimpleTextWithoutProgrammingErrors() {

@@ -14,30 +14,28 @@ public class Element {
     }
 
     public WebElement pasteCodeTextArea() {
-        WebElement textArea = wd.findElement(By.id("codeblock"));
-        Assert.assertNotNull("Не удалось найти поле codeblock для ввода кода", textArea);
-        return textArea;
-    }
-
-    public Element isPresent() {
-        return this;
+        return getElement("Не удалось найти поле codeblock для ввода кода",
+                By.id("codeblock"));
     }
 
     public WebElement scanResultHeader() {
-        WebElement scanResultHeader = wd.findElement(By.xpath("//div[@id='source-block']"));
-        Assert.assertNotNull("На странице не найден ожидаемый блок с текстом No source", scanResultHeader);
-        return scanResultHeader;
+        return getElement("На странице не найден ожидаемый блок с текстом No source",
+                By.xpath("//div[@id='source-block']"));
     }
 
     public WebElement scanResultSelectedBug() {
-        WebElement scanResultSelectedBug = wd.findElement(By.xpath("//div[@id='source-block']"));
-        Assert.assertNotNull("На странице не найден ожидаемый блок с текстом No selected bug", scanResultSelectedBug);
-        return scanResultSelectedBug;
+        return getElement("На странице не найден ожидаемый блок с текстом No selected bug",
+                By.xpath("//div[@id='source-block']"));
     }
 
     public WebElement scanResultFiles() {
-        WebElement scanResultCodeBlockFile = wd.findElement(By.xpath("//div[@id='source-block']/following-sibling::*[1]"));
-        Assert.assertNotNull("На странице не найден ожидаемый файд с результатами codeblock.sol", scanResultCodeBlockFile);
-        return scanResultCodeBlockFile;
+        return getElement("На странице не найден ожидаемый файд с результатами codeblock.sol",
+                By.xpath("//div[@id='source-block']/following-sibling::*[1]"));
+    }
+
+    public WebElement getElement(String errorMsg, By locator) {
+        WebElement element = wd.findElement(locator);
+        Assert.assertNotNull(errorMsg, element);
+        return element;
     }
 }
