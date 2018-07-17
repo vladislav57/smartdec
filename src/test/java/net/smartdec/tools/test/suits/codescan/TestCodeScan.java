@@ -10,40 +10,23 @@ import org.junit.Test;
  */
 public class TestCodeScan extends BaseTest {
 
+    // вот так должен выглядеть тест, ради этого все затевалось
+
     @Test
-    public void testScanSimpleJavaProgramWithoutErrors() {
+    public void testScanSimpleTextWithoutProgrammingErrors() {
 
-        // переходим на стартовую страницу
         app.goTo().mainPage();
-
-        // TODO убрать дублирование кода в функцию
-        // нажимаем на кнопку start using
         app.button().startUsing().click();
-
-        // нажимаем на кнопку paste code
         app.button().pasteCode().click();
-
-        // ожидаем загрузки и проверяем страницу для отправки кода на сканирование
         app.waitUntil().pasteCodePageLoaded();
-
-        // вставляем код в textarea
         app.element().pasteCodeTextArea().sendKeys("my beautiful code");
-
-        // нажимаем кнопку submit for scan
         app.button().submitForScan().click();
-
-        // ожидаем загрузки страницы
         app.waitUntil().scanResultPageLoaded();
 
-        // проверяем результат
-
-        // 1 - проверяем, что на странице выведено No Source и No selected bug
         Assert.assertTrue("Не найден заголовок No source на странице с результатами анализа кода",
                 app.element().scanResultHeader().getText().contains("No Source"));
         Assert.assertTrue("Не найдена фраза No selected bug на странице с результатами анализа кода",
                 app.element().scanResultSelectedBug().getText().contains("No selected bug"));
-
-        // 2 - проверяем, что на странице доступен файл codeblock.sol с результатами
         Assert.assertTrue("На странице не найден ожидаемый файд с результатами codeblock.sol",
                 app.element().scanResultFiles().getText().contains("codeblock.sol"));
     }
