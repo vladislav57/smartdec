@@ -1,32 +1,19 @@
-package net.smartdec.tools;
+package net.smartdec.tools.test.suits.codescan;
 
+import net.smartdec.tools.test.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.net.URL;
 
 /**
  * В этом классе нужно разместить тесты, которые сканируют код, вставленный на форму сайта (code scan, paste code)
  */
-public class TestCodeScan {
+public class TestCodeScan extends BaseTest {
 
     @Test
     public void testScanSimpleJavaProgramWithoutErrors() {
-
-        // подготовка к тесту
-        // TODO отделить метод setUp который выполняется до теста
-        URL url = getClass().getClassLoader().getResource("chromedriver.exe"); /* Не утверждаю, что так правильно.
-        Возможно, на реальном проекте лучше хранить драйвер, например, на общем сетевом ресурсе.
-        Места он занимает немного, поэтому здесь драйвер добавлен в ресурсы проекта для удобства проверяющего. */
-        System.setProperty("webdriver.chrome.driver", url.getFile());
-        WebDriver wd = new ChromeDriver();
-        WebDriverWait pageLoadWait = new WebDriverWait(wd, 10);
 
         // переходим на стартовую страницу
         wd.get("http://tool.smartdec.net");
@@ -64,6 +51,9 @@ public class TestCodeScan {
         // ожидаем загрузки страницы
         Boolean scanResult = pageLoadWait.until(ExpectedConditions.urlMatches("http://tool.smartdec.net/scan/[0-9a-z]*"));
         Assert.assertTrue("Не удалось перейти на страницу с результатами анализа кода", scanResult);
+        // здесь можно также сделать ожидание пока не исчезнет элемент, демонстрирующий загрузку
+        WebElement saveButton = pageLoadWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()[contains(.,'save')]]")));
+        Assert.assertNotNull("Не удалось дождаться появления кнопки save на странице с результатами анализа кода", saveButton);
 
         // проверяем результат
 
@@ -76,9 +66,5 @@ public class TestCodeScan {
         // 2 - проверяем, что на странице доступен файл codeblock.sol с результатами
         WebElement scanResultCodeBlockFile = wd.findElement(By.xpath("//span[text()='codeblock.sol']"));
         Assert.assertNotNull("На странице не найден ожидаемый файд с результатами codeblock.sol", scanResultCodeBlockFile);
-
-        // завершаем работу
-        // TODO отделить метод tearDown который выполняется после теста
-        wd.quit();
     }
 }
